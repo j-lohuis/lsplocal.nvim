@@ -9,8 +9,16 @@ Using `vim.pack`
 
 ```lua
 vim.pack.add({
-  'https://github.com/j-lohuis/lsplocal',
+  'https://github.com/j-lohuis/lsplocal.nvim',
 })
+```
+
+Using `lazy`
+
+```lua
+return {
+  'j-lohuis/lsplocal.nvim'
+}
 ```
 
 ## Usage
