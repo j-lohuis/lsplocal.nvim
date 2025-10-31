@@ -43,4 +43,11 @@ function M.maybe_load_local(name, default_tbl, opts)
   return merge_config(default_tbl, project_tbl)
 end
 
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('lsplocal-lsp-attach', { clear = true }),
+  callback = function(event)
+    print("lsplocal on attach " .. vim.inspect(event))
+  end
+})
+
 return M
