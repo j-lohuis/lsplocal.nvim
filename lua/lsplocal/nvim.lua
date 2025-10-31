@@ -37,8 +37,10 @@ end
 local function maybe_load_local(name, default_tbl, opts)
   opts = opts or {}
   local json_path = find_project_json(name, opts.start)
+  print("path: " .. vim.inspect(json_path))
   if not json_path then return default_tbl end
   local project_tbl = read_json_file(json_path)
+  print("project_tbl: " .. vim.inspect(project_tbl))
   if type(project_tbl) ~= "table" then return default_tbl end
   return merge_config(default_tbl, project_tbl)
 end
