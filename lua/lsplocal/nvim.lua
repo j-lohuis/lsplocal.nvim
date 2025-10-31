@@ -34,7 +34,7 @@ end
 -- default_tbl: the default config table you want returned if no project override
 -- opts (optional): { start = <path> } - override start search dir
 -- Returns: merged table (project overrides applied) or default_tbl
-function M.maybe_load_local(name, default_tbl, opts)
+local function maybe_load_local(name, default_tbl, opts)
   opts = opts or {}
   local json_path = find_project_json(name, opts.start)
   if not json_path then return default_tbl end
@@ -43,17 +43,19 @@ function M.maybe_load_local(name, default_tbl, opts)
   return merge_config(default_tbl, project_tbl)
 end
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('lsplocal-lsp-attach', { clear = true }),
-  callback = function(event)
-    print("lsplocal on attach")
-    print(vim.inspect(event))
-    local config = vim.lsp.get_client_by_id(event.data.client_id).config;
-    print(vim.inspect(config))
-    config.settings.Lua.workspace = nil
-    vim.lsp.config[config.name] = config;
-    print(vim.inspect(config))
-  end
-})
+function M.setup(config)
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('lsplocal-lsp-attach', { clear = true }),
+    callback = function(event)
+      print("lsplocal on attach")
+      local lspconfig = vim.lsp.get_client_by_id(event.data.client_id).config;
+      print("Default config: " .. vim.inspect(lspconfig))
+      local name = lspconfig.name;
+
+      vim.lsp.config[name] = maybe_load_local(name, lspconfig)
+      print("Overridden config: " .. vim.inspect(config))
+    end
+  })
+end
 
 return M
