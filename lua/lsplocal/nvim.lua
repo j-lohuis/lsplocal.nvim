@@ -54,8 +54,9 @@ function M.setup(config)
       print("Default config: " .. vim.inspect(lspconfig))
       local name = lspconfig.name;
 
-      vim.lsp.config[name] = maybe_load_local(name, lspconfig)
-      print("Overridden config: " .. vim.inspect(config))
+      local merged_config = maybe_load_local(name, lspconfig)
+      vim.lsp.config[name] = merged_config;
+      print("Overridden config: " .. vim.inspect(merged_config))
     end
   })
 end
