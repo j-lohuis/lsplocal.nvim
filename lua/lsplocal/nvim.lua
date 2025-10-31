@@ -46,7 +46,12 @@ end
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsplocal-lsp-attach', { clear = true }),
   callback = function(event)
-    print("lsplocal on attach " .. vim.inspect(event))
+    print("lsplocal on attach")
+    print(vim.inspect(event))
+    local config = vim.lsp.get_client_by_id(event.data.client_id).config;
+    print(config)
+    config.settings.Lua.workspace = nil
+    vim.lsp.config[config.name] = config;
   end
 })
 
